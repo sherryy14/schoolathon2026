@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Event Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #1a1f35 0%, #0d0f20 100%);
+            min-height: 100vh;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .logo h4 {
+            margin: 0;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo p {
+            margin: 0;
+            font-size: 12px;
+            color: #adb5bd;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            color: #adb5bd;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h6 {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 32px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: #212529;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-custom {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        .table-custom {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-custom table {
+            margin: 0;
+        }
+
+        .table-custom thead {
+            background: linear-gradient(135deg, #1a1f35, #0d0f20);
+            color: white;
+        }
+
+        .table-custom thead th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table-custom tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .form-group-custom {
+            margin-bottom: 20px;
+        }
+
+        .form-group-custom label {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group-custom input,
+        .form-group-custom select,
+        .form-group-custom textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group-custom input:focus,
+        .form-group-custom select:focus,
+        .form-group-custom textarea:focus {
+            outline: none;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1a1f35, #0d0f20);
+            color: white;
+            border: none;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background-color: #cfe2ff;
+            color: #0d6efd;
+        }
+
+        .btn-edit:hover {
+            background-color: #b6d4fe;
+        }
+
+        .btn-delete {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .btn-delete:hover {
+            background-color: #f5c2c7;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card h5 {
+            margin: 10px 0 5px 0;
+            font-weight: 600;
+        }
+
+        .category-card p {
+            margin: 0;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #0d6efd;
+        }
+
+        .team-card h5 {
+            margin: 0 0 5px 0;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .team-card p {
+            margin: 3px 0;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .team-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .team-info-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .team-info-item label {
+            display: block;
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .team-info-item strong {
+            display: block;
+            font-size: 16px;
+            color: #212529;
+        }
+
+        .sport-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sport-card h6 {
+            color: #0d6efd;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .badge-custom {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div>
+                <h4>SportHub</h4>
+                <p>Event Manager</p>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a class="nav-link active" onclick="showSection('dashboard', event)"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+            <li><a class="nav-link" onclick="showSection('events', event)"><i class="fas fa-calendar"></i> Events</a></li>
+            <li><a class="nav-link" onclick="showSection('sports', event)"><i class="fas fa-medal"></i> Sports</a></li>
+            <li><a class="nav-link" onclick="showSection('categories', event)"><i class="fas fa-layer-group"></i> Categories</a></li>
+            <li><a class="nav-link" onclick="showSection('eligibility', event)"><i class="fas fa-check-circle"></i> Eligibility</a></li>
+            <li><a class="nav-link" onclick="showSection('teams', event)"><i class="fas fa-users"></i> Teams</a></li>
+            <li><a class="nav-link" onclick="showSection('students', event)"><i class="fas fa-user-graduate"></i> Students</a></li>
+            <li><a class="nav-link" onclick="showSection('participation', event)"><i class="fas fa-handshake"></i> Participation</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="topbar">
+            <h3><i class="fas fa-home"></i> Sports Event Management System</h3>
+            <div>
+                <input type="text" class="form-control" style="width: 250px; display: inline-block;" placeholder="Search...">
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="page-section active">
+            <div class="section-title">
+                <h4>Dashboard</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#eventModal">
+                    <i class="fas fa-plus"></i> New Event
+                </button>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card" style="border-left-color: #0d6efd;">
+                        <div class="stat-card-icon"><i class="fas fa-calendar" style="color: #0d6efd;"></i></div>
+                        <h6>Active Events</h6>
+                        <h3>2</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card" style="border-left-color: #6f42c1;">
+                        <div class="stat-card-icon"><i class="fas fa-medal" style="color: #6f42c1;"></i></div>
+                        <h6>Total Sports</h6>
+                        <h3>16</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card" style="border-left-color: #fd7e14;">
+                        <div class="stat-card-icon"><i class="fas fa-users" style="color: #fd7e14;"></i></div>
+                        <h6>Total Teams</h6>
+                        <h3>7</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card" style="border-left-color: #198754;">
+                        <div class="stat-card-icon"><i class="fas fa-user-tie" style="color: #198754;"></i></div>
+                        <h6>Total Participants</h6>
+                        <h3>627</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 30px;">
+                <h5>Categories</h5>
+            </div>
+
+            <div class="category-grid">
+                <div class="category-card" style="border-left-color: #0d6efd;">
+                    <i class="fas fa-layer-group" style="font-size: 28px; color: #0d6efd;"></i>
+                    <h5>Team</h5>
+                    <p>4 sports</p>
+                </div>
+                <div class="category-card" style="border-left-color: #6f42c1;">
+                    <i class="fas fa-star" style="font-size: 28px; color: #6f42c1;"></i>
+                    <h5>Individual</h5>
+                    <p>4 sports</p>
+                </div>
+                <div class="category-card" style="border-left-color: #fd7e14;">
+                    <i class="fas fa-running" style="font-size: 28px; color: #fd7e14;"></i>
+                    <h5>Track & Field</h5>
+                    <p>5 sports</p>
+                </div>
+                <div class="category-card" style="border-left-color: #0dcaf0;">
+                    <i class="fas fa-water" style="font-size: 28px; color: #0dcaf0;"></i>
+                    <h5>Aquatic</h5>
+                    <p>3 sports</p>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 30px;">
+                <h5>Recent Events</h5>
+            </div>
+
+            <div class="card-custom">
+                <div class="table-custom">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Participants</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Schoolathon 2026</strong></td>
+                                <td>Mar 20, 2026</td>
+                                <td>Central Sports Complex</td>
+                                <td><span class="badge bg-primary">342</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inter-School Championship 2026</strong></td>
+                                <td>Apr 10, 2026</td>
+                                <td>National Sports Stadium</td>
+                                <td><span class="badge bg-primary">285</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div id="events" class="page-section">
+            <div class="section-title">
+                <h4>Events Management</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#eventModal">
+                    <i class="fas fa-plus"></i> Create Event
+                </button>
+            </div>
+
+            <div class="card-custom">
+                <div class="table-custom">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Year</th>
+                                <th>Registration Start</th>
+                                <th>Event Start Date</th>
+                                <th>Venue</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Schoolathon 2026</strong></td>
+                                <td>2026</td>
+                                <td>Jan 15, 2026</td>
+                                <td>Mar 20, 2026</td>
+                                <td>Central Sports Complex</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inter-School Championship 2026</strong></td>
+                                <td>2026</td>
+                                <td>Feb 01, 2026</td>
+                                <td>Apr 10, 2026</td>
+                                <td>National Sports Stadium</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Summer Games 2025</strong></td>
+                                <td>2025</td>
+                                <td>May 01, 2025</td>
+                                <td>Jul 15, 2025</td>
+                                <td>City Park Athletic Ground</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sports Section -->
+        <div id="sports" class="page-section">
+            <div class="section-title">
+                <h4>Sports Management</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#sportModal">
+                    <i class="fas fa-plus"></i> Add Sport
+                </button>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="sport-card">
+                        <h6><i class="fas fa-cricket"></i> Cricket - Hard Ball</h6>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Category</p>
+                                <p style="font-weight: 600; color: #212529;">Team</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Gender</p>
+                                <p style="font-weight: 600; color: #212529;">Male</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Teams</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #0d6efd;">3</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Players</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #6f42c1;">45</p>
+                            </div>
+                        </div>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="sport-card">
+                        <h6><i class="fas fa-futbol"></i> Futsal</h6>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Category</p>
+                                <p style="font-weight: 600; color: #212529;">Team</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Gender</p>
+                                <p style="font-weight: 600; color: #212529;">Both</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Teams</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #0d6efd;">2</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Players</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #6f42c1;">24</p>
+                            </div>
+                        </div>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="sport-card">
+                        <h6><i class="fas fa-volleyball"></i> Volleyball</h6>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Category</p>
+                                <p style="font-weight: 600; color: #212529;">Team</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Gender</p>
+                                <p style="font-weight: 600; color: #212529;">Both</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Teams</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #0d6efd;">2</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Players</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #6f42c1;">28</p>
+                            </div>
+                        </div>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="sport-card">
+                        <h6><i class="fas fa-running"></i> 100m Sprint</h6>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Category</p>
+                                <p style="font-weight: 600; color: #212529;">Track & Field</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Gender</p>
+                                <p style="font-weight: 600; color: #212529;">Both</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Participants</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #0d6efd;">0</p>
+                            </div>
+                            <div class="col-6">
+                                <p style="color: #6c757d; font-size: 13px; margin-bottom: 5px;">Athletes</p>
+                                <p style="font-weight: 600; font-size: 20px; color: #6f42c1;">18</p>
+                            </div>
+                        </div>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div id="categories" class="page-section">
+            <div class="section-title">
+                <h4>Categories</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#categoryModal"><i class="fas fa-plus"></i> Add Category</button>
+            </div>
+            <div class="card-custom table-custom">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <tr>
+                            <td><strong>Team</strong></td>
+                            <td>Team-based sports</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Eligibility Section -->
+        <div id="eligibility" class="page-section">
+            <div class="section-title">
+                <h4>Eligibility Rules</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#eligibilityModal"><i class="fas fa-plus"></i> Add Rule</button>
+            </div>
+            <div class="card-custom table-custom">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Sport</th>
+                            <th>School</th>
+                            <th>Class</th>
+                            <th>Min Age</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eligibilityTableBody">
+                        <tr>
+                            <td>Cricket - Hard Ball</td>
+                            <td>Central High</td>
+                            <td>Grade 10</td>
+                            <td>14</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="teams" class="page-section">
+            <div class="section-title">
+                <h4>Teams Management</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#teamModal"><i class="fas fa-plus"></i> Create Team</button>
+            </div>
+            <div class="card-custom table-custom">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Team Name</th>
+                            <th>Sport</th>
+                            <th>Event</th>
+                            <th>School</th>
+                            <th>Coach</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamsTableBody">
+                        <tr>
+                            <td><strong>Central High A</strong></td>
+                            <td>Cricket - Hard Ball</td>
+                            <td>Schoolathon 2026</td>
+                            <td>Central High</td>
+                            <td>J. Smith</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-sm-icon btn-edit" data-bs-toggle="modal" data-bs-target="#teamMembersModal" data-team="Central High A" title="Members"><i class="fas fa-user-friends"></i></button>
+                                    <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="students" class="page-section">
+            <div class="section-title">
+                <h4>Students</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#studentModal"><i class="fas fa-plus"></i> Add Student</button>
+            </div>
+            <div class="card-custom table-custom">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>School</th>
+                            <th>Class</th>
+                            <th>Gender</th>
+                            <th>DOB</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <tr>
+                            <td><strong>Alex Johnson</strong></td>
+                            <td>Central High</td>
+                            <td>Grade 10</td>
+                            <td>Male</td>
+                            <td>2009-04-11</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="participation" class="page-section">
+            <div class="section-title">
+                <h4>Student Participation</h4>
+                <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#participationModal"><i class="fas fa-plus"></i> Add Participation</button>
+            </div>
+            <div class="card-custom table-custom">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Sport</th>
+                            <th>Event</th>
+                            <th>Team</th>
+                            <th>Status</th>
+                            <th>Score</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participationTableBody">
+                        <tr>
+                            <td>Alex Johnson</td>
+                            <td>100m Sprint</td>
+                            <td>Schoolathon 2026</td>
+                            <td>-</td>
+                            <td><span class="badge bg-secondary">applied</span></td>
+                            <td>-</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-calendar"></i> Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="eventForm">
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Name</label>
+                                    <input type="text" name="name" class="form-control" required>
+                                </div>
+                                <div class="col-md-3 form-group-custom">
+                                    <label>Year</label>
+                                    <input type="number" name="year" class="form-control" min="2000" max="2100" required>
+                                </div>
+                                <div class="col-md-3 form-group-custom">
+                                    <label>Venue</label>
+                                    <input type="text" name="venue" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Registration Start Date</label>
+                                    <input type="date" name="registration_start_date" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Event Start Date</label>
+                                    <input type="date" name="event_start_date" class="form-control" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="sportModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-medal"></i> Sport</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="sportForm">
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Name</label>
+                                    <input type="text" name="name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Category</label>
+                                    <select name="category_id" class="form-select" required>
+                                        <option value="">Select</option>
+                                        <option value="1">Team</option>
+                                        <option value="2">Individual</option>
+                                        <option value="3">Track & Field</option>
+                                        <option value="4">Aquatic</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group-custom">
+                                    <label>Gender</label>
+                                    <select name="gender" class="form-select">
+                                        <option value="both">Both</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group-custom">
+                                    <label>Squad Size</label>
+                                    <input type="number" name="squad_size" class="form-control" min="1" value="1">
+                                </div>
+                                <div class="col-md-4 form-group-custom">
+                                    <label>Playing Size</label>
+                                    <input type="number" name="playing_size" class="form-control" min="1" value="1">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="teamModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-users"></i> Team</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="teamForm">
+                            <div class="form-group-custom">
+                                <label>Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Sport</label>
+                                    <select name="sport_id" class="form-select" required>
+                                        <option value="1">Cricket - Hard Ball</option>
+                                        <option value="2">Futsal</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Event</label>
+                                    <select name="event_id" class="form-select" required>
+                                        <option value="1">Schoolathon 2026</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>School</label>
+                                    <select name="school_id" class="form-select" required>
+                                        <option value="1">Central High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Coach Name</label>
+                                    <input type="text" name="coach_name" class="form-control">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="studentModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-user-graduate"></i> Student</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="studentForm">
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>First Name</label>
+                                    <input type="text" name="first_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Last Name</label>
+                                    <input type="text" name="last_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>School</label>
+                                    <select name="school_id" class="form-select" required>
+                                        <option value="1">Central High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Class</label>
+                                    <select name="class_id" class="form-select" required>
+                                        <option value="10">Grade 10</option>
+                                        <option value="11">Grade 11</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Gender</label>
+                                    <select name="gender" class="form-select" required>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="participationModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-handshake"></i> Participation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="participationForm">
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Student</label>
+                                    <select name="student_id" class="form-select" required>
+                                        <option value="1">Alex Johnson</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Sport</label>
+                                    <select name="sport_id" class="form-select" required>
+                                        <option value="4">100m Sprint</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Event</label>
+                                    <select name="event_id" class="form-select" required>
+                                        <option value="1">Schoolathon 2026</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Team (optional)</label>
+                                    <select name="team_id" class="form-select">
+                                        <option value="">None</option>
+                                        <option value="1">Central High A</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Status</label>
+                                    <select name="participation_status" class="form-select">
+                                        <option value="applied">applied</option>
+                                        <option value="approved">approved</option>
+                                        <option value="rejected">rejected</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Score</label>
+                                    <input type="number" step="0.01" name="score" class="form-control">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moved modals to end of body for proper Bootstrap behavior -->
+        <div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-layer-group"></i> Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="categoryForm">
+                            <div class="form-group-custom">
+                                <label>Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="form-group-custom">
+                                <label>Description</label>
+                                <textarea name="description" class="form-control" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="eligibilityModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-check-circle"></i> Eligibility Rule</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="eligibilityForm">
+                            <div class="row">
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Sport</label>
+                                    <select name="sport_id" class="form-select" required>
+                                        <option value="1">Cricket - Hard Ball</option>
+                                        <option value="2">Futsal</option>
+                                        <option value="4">100m Sprint</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>School</label>
+                                    <select name="school_id" class="form-select" required>
+                                        <option value="1">Central High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Class</label>
+                                    <select name="class_id" class="form-select" required>
+                                        <option value="10">Grade 10</option>
+                                        <option value="11">Grade 11</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label>Min Age</label>
+                                    <input type="number" name="min_age" class="form-control" min="0" value="0">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="teamMembersModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-user-friends"></i> Team Members - <span id="teamMembersTitle">Team</span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="teamMemberForm">
+                            <div class="form-group-custom">
+                                <label>Team</label>
+                                <select name="team_id" class="form-select">
+                                    <option value="1">Central High A</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 form-group-custom">
+                                    <label>Student</label>
+                                    <select name="student_id" class="form-select" required>
+                                        <option value="1">Alex Johnson</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group-custom">
+                                    <label>Role</label>
+                                    <select name="role" class="form-select">
+                                        <option value="player">player</option>
+                                        <option value="captain">captain</option>
+                                        <option value="substitute">substitute</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Add</button>
+                        </form>
+                        <div class="card-custom table-custom" style="margin-top:15px;">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="teamMembersTableBody">
+                                    <tr>
+                                        <td>Alex Johnson</td>
+                                        <td>player</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function showSection(id, e) {
+                if (e) { e.preventDefault(); }
+                document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+                const el = document.getElementById(id);
+                if (el) el.classList.add('active');
+                document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+                if (e && e.target) e.target.classList.add('active');
+            }
+
+            document.getElementById('eventForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const data = Object.fromEntries(new FormData(this).entries());
+                const tbody = document.querySelector('#events tbody');
+                if (tbody) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${data.name}</strong></td>
+                        <td>${data.year}</td>
+                        <td>${data.registration_start_date}</td>
+                        <td>${data.event_start_date}</td>
+                        <td>${data.venue}</td>
+                        <td><div class=\"action-buttons\"><button class=\"btn-sm-icon btn-edit\" title=\"Edit\"><i class=\"fas fa-edit\"></i></button><button class=\"btn-sm-icon btn-delete\" title=\"Delete\"><i class=\"fas fa-trash\"></i></button></div></td>`;
+                    tbody.appendChild(tr);
+                }
+                bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('sportForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                bootstrap.Modal.getInstance(document.getElementById('sportModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('teamForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const data = Object.fromEntries(new FormData(this).entries());
+                const tbody = document.getElementById('teamsTableBody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${data.name}</strong></td>
+                    <td>${this.querySelector('[name=\"sport_id\"] option:checked').textContent}</td>
+                    <td>${this.querySelector('[name=\"event_id\"] option:checked').textContent}</td>
+                    <td>${this.querySelector('[name=\"school_id\"] option:checked').textContent}</td>
+                    <td>${data.coach_name || '-'}</td>
+                    <td><div class=\"action-buttons\"><button class=\"btn-sm-icon btn-edit\" title=\"Edit\"><i class=\"fas fa-edit\"></i></button><button class=\"btn-sm-icon btn-delete\" title=\"Delete\"><i class=\"fas fa-trash\"></i></button></div></td>`;
+                tbody.appendChild(tr);
+                bootstrap.Modal.getInstance(document.getElementById('teamModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('studentForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const f = new FormData(this);
+                const tbody = document.getElementById('studentsTableBody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${f.get('first_name')} ${f.get('last_name')}</strong></td>
+                    <td>${this.querySelector('[name=\"school_id\"] option:checked').textContent}</td>
+                    <td>${this.querySelector('[name=\"class_id\"] option:checked').textContent}</td>
+                    <td>${f.get('gender')}</td>
+                    <td>${f.get('dob')}</td>
+                    <td><div class=\"action-buttons\"><button class=\"btn-sm-icon btn-edit\" title=\"Edit\"><i class=\"fas fa-edit\"></i></button><button class=\"btn-sm-icon btn-delete\" title=\"Delete\"><i class=\"fas fa-trash\"></i></button></div></td>`;
+                tbody.appendChild(tr);
+                bootstrap.Modal.getInstance(document.getElementById('studentModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('participationForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const tbody = document.getElementById('participationTableBody');
+                const s = this;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${s.querySelector('[name=\"student_id\"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name=\"sport_id\"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name=\"event_id\"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name=\"team_id\"] option:checked').textContent || '-'}</td>
+                    <td><span class=\"badge bg-secondary\">${s.querySelector('[name=\"participation_status\"]').value}</span></td>
+                    <td>${s.querySelector('[name=\"score\"]').value || '-'}</td>
+                    <td><div class=\"action-buttons\"><button class=\"btn-sm-icon btn-edit\" title=\"Edit\"><i class=\"fas fa-edit\"></i></button><button class=\"btn-sm-icon btn-delete\" title=\"Delete\"><i class=\"fas fa-trash\"></i></button></div></td>`;
+                tbody.appendChild(tr);
+                bootstrap.Modal.getInstance(document.getElementById('participationModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('categoryForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const f = new FormData(this);
+                const tbody = document.getElementById('categoriesTableBody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${f.get('name')}</strong></td>
+                    <td>${f.get('description') || ''}</td>
+                    <td><div class="action-buttons"><button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button><button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button></div></td>`;
+                tbody.appendChild(tr);
+                bootstrap.Modal.getInstance(document.getElementById('categoryModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('eligibilityForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const s = this;
+                const tbody = document.getElementById('eligibilityTableBody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${s.querySelector('[name="sport_id"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name="school_id"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name="class_id"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name="min_age"]').value}</td>
+                    <td><div class="action-buttons"><button class="btn-sm-icon btn-edit" title="Edit"><i class="fas fa-edit"></i></button><button class="btn-sm-icon btn-delete" title="Delete"><i class="fas fa-trash"></i></button></div></td>`;
+                tbody.appendChild(tr);
+                bootstrap.Modal.getInstance(document.getElementById('eligibilityModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('teamMembersModal')?.addEventListener('show.bs.modal', function (e) {
+                const btn = e.relatedTarget;
+                if (btn && btn.getAttribute('data-team')) {
+                    document.getElementById('teamMembersTitle').textContent = btn.getAttribute('data-team');
+                }
+            });
+
+            document.getElementById('teamMemberForm')?.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                const s = this;
+                const tbody = document.getElementById('teamMembersTableBody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${s.querySelector('[name="student_id"] option:checked').textContent}</td>
+                    <td>${s.querySelector('[name="role"]').value}</td>`;
+                tbody.appendChild(tr);
+                this.reset();
+            });
+        </script>
+    </div>
+    </body>
+    </html>
